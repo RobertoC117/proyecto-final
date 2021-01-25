@@ -5,11 +5,12 @@ const dataInicial = {
     loading: false,
     active: false,
     msg:null,
+    breadcrumbs: []
 }
 
 const USER_EXITO = 'USER_EXITO';
 const USER_MSG = 'USER_MSG';
-const UPDATE_DATA = 'UPDATE_DATA'
+const BREADCRUMBS = 'BREADCRUMBS'
 const GET_INFO = 'GET_INFO';
 const LOGOUT = 'LOGOUT';
 const LOGIN = 'LOGIN'
@@ -25,6 +26,8 @@ export default function userReducer(state = dataInicial, action){
             return {...dataInicial}
         case USER_MSG:
             return {...state, msg:action.payload, loading: false}
+        case BREADCRUMBS:
+            return {...state, breadcrumbs: action.payload}
         default:
             return state;
     }
@@ -295,6 +298,7 @@ export const cerrarSesion = () => async(dispatch) =>{
             type: LOGOUT
         })
         localStorage.removeItem('userData')
+        localStorage.removeItem('breadcrumbs')
         
     } catch (error) {
         dispatch({
@@ -315,16 +319,64 @@ export const createNewMsg = (msg) => async(dispatch) =>{
 }
 
 export const deleteMsg = () => async(dispatch) =>{
-    //NO SE QUE HACER PARA BORRAR LOS MENSAJES Y QUE NO SE QUEDE ALLI COMO PENDEJOS
+    //NO SE QUE HACER PARA BORRAR LOS MENSAJES Y QUE NO SE QUEDE ALLI
 }
 
-export const mantenerUserState = () => async(dispatch) =>{
+export const AddBreadcrum = (name, path) => (dispatch, getState) =>{
+    try {
+        let {breadcrumbs} = getState().user
+        let bread = breadcrumbs.slice();
+        let exist = bread.findIndex(item => item.path === path)
+        if(exist != -1){
+
+            console.log(exist)
+            let migaja;
+            if(exist !== 0){
+                migaja = bread.splice(exist, exist);
+                bread.push(migaja[0]);
+            }else{
+                migaja = bread.shift();
+                bread.push(migaja);
+            }
+
+        }else{
+
+            if(bread.length === 5)
+                bread.shift();
+            
+            bread.push({name, path})
+
+        }
+
+        //bread.push({name, path});
+
+        console.log(bread)
+
+        localStorage.setItem('breadcrumbs', JSON.stringify(bread))
+
+        dispatch({
+            type: BREADCRUMBS,
+            payload: bread
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const mantenerUserState = () => (dispatch) =>{
     try {
         if(localStorage.getItem('userData'))
         {
             dispatch({
                 type: USER_EXITO,
                 payload: JSON.parse(localStorage.getItem('userData'))
+            })
+        }
+        if(localStorage.getItem('breadcrumbs'))
+        {
+            dispatch({
+                type: BREADCRUMBS,
+                payload: JSON.parse(localStorage.getItem('breadcrumbs'))
             })
         }
     } catch (error) {

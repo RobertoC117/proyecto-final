@@ -13,6 +13,9 @@ import { BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-do
 import {auth} from './config/firebase'
 import Main from './components/Main'
 import React from 'react'
+import BreadBar from './components/BreadBar'
+import NotFound from './components/NotFound'
+import { Grid } from '@material-ui/core'
 
 function App() {
 
@@ -50,8 +53,10 @@ function App() {
 
   return firebaseUser !== false ? (
     <Router>
-      <div>
+      <Grid style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} >
         <Header/>
+        {/* <Breadbar/> */}
+        <BreadBar/>
         <Switch>
         <Route path='/' exact>
             <Inicio/>
@@ -72,13 +77,11 @@ function App() {
           </Route>
           {/* PARA LA RUTA QUE NO EXISTE */}
           <Route path='*'>
-            <div>
-              NO EXISTE
-            </div>
+            <NotFound/>
           </Route>
         </Switch>
         <Footer/>
-      </div>
+        </Grid>
     </Router>
   ):(<div>Cargando...</div>);
 }
