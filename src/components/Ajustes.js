@@ -7,9 +7,17 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import TextField from "@material-ui/core/TextField";
 import Button from '@material-ui/core/Button';
+import {useDispatch, useSelector} from 'react-redux'
+import { AddBreadcrum } from '../redux/userDuck'
+import { useLocation } from 'react-router-dom'
 
 export default function InputAdornments() {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const path = useLocation().pathname;
+  React.useEffect(()=>{
+      dispatch(AddBreadcrum("Ajustes", path))
+  },[])
   return (
     <div className={classes.root}>
       <Grid container direction="column" justify="center" alignItems="center" variant="outlined" >

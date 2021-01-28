@@ -4,6 +4,7 @@ import Grid from "@material-ui/core/Grid";
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Link from '@material-ui/core/Link';
 import { useSelector } from 'react-redux'
+import { useLocation } from 'react-router-dom'
 
 export default function Breadcrumb() {
   const classes = useStyles();
@@ -14,7 +15,7 @@ export default function Breadcrumb() {
       <Breadcrumbs aria-label="breadcrumb" className={classes.bread}>
         {/* <Link color="inherit" href="#"> Link </Link> */}
         {
-            breadcrumbs.map(item => <Link color="inherit" href={item.path}> {item.name} </Link>)
+            breadcrumbs.map(item => <Link color="inherit" href={item.path} > {item.name} </Link>)
         }
       </Breadcrumbs>
     </Grid> :

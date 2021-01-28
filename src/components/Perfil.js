@@ -17,6 +17,8 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import { Business, AccountBox, Twitter, Language, LocationOn} from "@material-ui/icons";
 import { editarDatos, cambiarPassword, cambiarImagen, createNewMsg } from '../redux/userDuck'
 import CryptoJS from 'crypto-js';
+import { AddBreadcrum } from '../redux/userDuck'
+import { useLocation } from 'react-router-dom'
 
 export default function Perfil() {
 
@@ -25,6 +27,10 @@ export default function Perfil() {
   const datosUsuario = useSelector(store => store.user.userdata)
   const msg = useSelector(store => store.user.msg)
   const loading = useSelector(store => store.user.loading)
+  const path = useLocation().pathname;
+  React.useEffect(()=>{
+      dispatch(AddBreadcrum("Perfil", path))
+  },[])
   
   const [values, setValues] = React.useState({
     editable: false,

@@ -2,9 +2,11 @@ import { createStore, combineReducers, compose, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 
 import userReducer,{ mantenerUserState } from './userDuck';
+import postReducer from './postDuck'
 
 const rootReducer = combineReducers({
-    user: userReducer
+    user: userReducer,
+    posts: postReducer
 })
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

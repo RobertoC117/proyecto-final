@@ -164,20 +164,21 @@ const PrimarySearchAppBar = (props)=> {
           <div className={classes.image}>
            <img className={classes.img} alt="Logotipo" src={Logo} onClick={() =>{active ? (props.history.push('/main')):(props.history.push('/'))}}/>
           </div>
-          <Typography className={classes.title} variant="h6" noWrap>
+          {/* <Typography className={classes.title} variant="h6" noWrap>
             Inicio
-          </Typography>
+          </Typography> */}
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>
             <InputBase
-              placeholder="Search…"
+              placeholder="Busqueda..."
               classes={{
                 root: classes.inputRoot,
                 input: classes.inputInput, }}
               inputProps={{ 'aria-label': 'search' }}
               />
+            <Button style={{color:'white'}} onClick={() =>{props.history.push('/busqueda')}} >Buscar</Button>
           </div>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>

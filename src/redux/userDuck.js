@@ -332,7 +332,7 @@ export const AddBreadcrum = (name, path) => (dispatch, getState) =>{
             console.log(exist)
             let migaja;
             if(exist !== 0){
-                migaja = bread.splice(exist, exist);
+                migaja = bread.splice(exist, 1);
                 bread.push(migaja[0]);
             }else{
                 migaja = bread.shift();
@@ -341,7 +341,7 @@ export const AddBreadcrum = (name, path) => (dispatch, getState) =>{
 
         }else{
 
-            if(bread.length === 5)
+            if(bread.length === 7)
                 bread.shift();
             
             bread.push({name, path})

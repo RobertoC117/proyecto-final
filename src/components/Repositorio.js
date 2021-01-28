@@ -9,10 +9,10 @@ import { AddBreadcrum } from '../redux/userDuck'
 import { useLocation } from 'react-router-dom'
 
 const Repositorio = () => {
+  
   const classes = useStyles();
   const dispatch = useDispatch();
   const path = useLocation().pathname;
-  const migajas = useSelector(store => store.user.breadcrumbs)
   
   React.useEffect(()=>{
       dispatch(AddBreadcrum("Repositorio", path))

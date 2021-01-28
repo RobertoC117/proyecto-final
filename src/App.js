@@ -5,7 +5,7 @@ import Perfil from './components/Perfil'
 import Login from './components/Login'
 import Registro from './components/Registro'
 import Nuevo from './components/NewPost'
-import Post from './components/Post'
+import Post from './components/Post.js'
 import Aviso from './components/Vizualizador'
 import Inicio from './components/Home'
 import Ajustes from './components/Ajustes'
@@ -15,6 +15,7 @@ import Main from './components/Main'
 import React from 'react'
 import BreadBar from './components/BreadBar'
 import NotFound from './components/NotFound'
+import Busqueda from './components/Busqueda'
 import { Grid } from '@material-ui/core'
 
 function App() {
@@ -58,7 +59,7 @@ function App() {
         {/* <Breadbar/> */}
         <BreadBar/>
         <Switch>
-        <Route path='/' exact>
+          <Route path='/' exact>
             <Inicio/>
           </Route>
           <Route path='/login'>
@@ -72,6 +73,7 @@ function App() {
           <RutaProtegida component={Repositorio} path="/repositorio" exact/>
           <RutaProtegida component={Ajustes} path="/ajustes" exact/>
           <RutaProtegida component={Post} path="/post" exact/>
+          <RutaProtegida component={Busqueda} path="/busqueda" exact/>
           <Route path='/aviso'>
             <Aviso/>
           </Route>
