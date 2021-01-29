@@ -9,13 +9,11 @@ import Typography from "@material-ui/core/Typography";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from '@material-ui/core/Checkbox';
 import Divider from '@material-ui/core/Divider';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
 // icons
 import FavoriteOutlineIcon from '@material-ui/icons/FavoriteBorder';
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import Comentario from './Comentario';
-//Breadcrumbs
+//
 import { withRouter, useLocation} from 'react-router-dom'
 import {useDispatch, useSelector} from 'react-redux'
 import { AddBreadcrum } from '../redux/userDuck'
@@ -29,7 +27,6 @@ export default function Post() {
   React.useEffect(()=>{
       dispatch(AddBreadcrum("Post", path))
   },[])
-
   return (
     <Grid container direction="column" justify="space-around" alignItems="center" className={classes.root} >
       <Grid item xs={9}>
@@ -74,11 +71,7 @@ export default function Post() {
             </Grid>
           </CardActions>
           <Divider />
-          <Grid container direction="column" justify="flex-start" alignItems="center" className={classes.comments}>            
-            <Grid container direcion="row" className={classes.Addcomments}>
-              <TextField size="small" label="Añade un Comentario" variant="filled" className={classes.txtfield} />
-              <Button variant="contained" color="primary" disableElevation className={classes.button} > Publicar </Button>
-            </Grid>
+          <Grid container direction="column" justify="flex-start" alignItems="center" className={classes.comments}>
             <Comentario />
             <Comentario />
           </Grid>
@@ -92,7 +85,6 @@ const useStyles =  makeStyles((theme) => ({
   root: {
     display: "flex",
     flexWrap: "wrap",
-    backgroundColor: '#f5f5f5'
   },
   post: {
     flex: 5,
@@ -118,16 +110,5 @@ const useStyles =  makeStyles((theme) => ({
     paddingRight: theme.spacing(1),
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-  },
-  Addcomments: {
-    paddingTop: theme.spacing(1),
-    paddingBottom: theme.spacing(1),
-    paddingRight: theme.spacing(1),
-  },
-  txtfield: {
-    flex: 1,
-  },
-  button: {
-    marginLeft: theme.spacing(1),
   }
 }));

@@ -1,5 +1,6 @@
 import Footer from './components/Footer'
-import Header from './components/Header'
+import Header from './components/Header.js'
+import Header2 from './components/Header2.js'
 import Repositorio from './components/Repositorio'
 import Perfil from './components/Perfil'
 import Login from './components/Login'
@@ -16,6 +17,8 @@ import React from 'react'
 import BreadBar from './components/BreadBar'
 import NotFound from './components/NotFound'
 import Busqueda from './components/Busqueda'
+import Preguntas from './components/PreguntasFrec'
+import Contacto from './components/Contacto'
 import { Grid } from '@material-ui/core'
 
 function App() {
@@ -56,7 +59,6 @@ function App() {
     <Router>
       <Grid style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} >
         <Header/>
-        {/* <Breadbar/> */}
         <BreadBar/>
         <Switch>
           <Route path='/' exact>
@@ -72,14 +74,26 @@ function App() {
           <RutaProtegida component={Perfil} path="/perfil" exact/>
           <RutaProtegida component={Repositorio} path="/repositorio" exact/>
           <RutaProtegida component={Ajustes} path="/ajustes" exact/>
-          <RutaProtegida component={Post} path="/post" exact/>
-          <RutaProtegida component={Busqueda} path="/busqueda" exact/>
+          <RutaProtegida component={Post} path="/post/:id" exact/>
+          <RutaProtegida component={Busqueda} path="/busqueda/:word" exact/>
+          <RutaProtegida path="/busqueda/*" exact>
+              <NotFound title={"Error 400 "} texto={"La peticion no se completo por que hacen falta parametros"}/>
+          </RutaProtegida>
+          <RutaProtegida path="/post/*" exact>
+              <NotFound title={"Error 400 "} texto={"La peticion no se completo por que hacen falta parametros"}/>
+          </RutaProtegida>
           <Route path='/aviso'>
             <Aviso/>
           </Route>
+          <Route path='/contacto'>
+            <Contacto/>
+          </Route>
+          <Route path='/preguntas_frecuentes'>
+            <Preguntas/>
+          </Route>
           {/* PARA LA RUTA QUE NO EXISTE */}
           <Route path='*'>
-            <NotFound/>
+            <NotFound title={"Error 404 "} texto={"La página no se encontró "}/>
           </Route>
         </Switch>
         <Footer/>

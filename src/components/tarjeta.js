@@ -17,7 +17,7 @@ const Tarjeta = (props) => {
   const classes = useStyles();
   
   const redireccion = () =>{
-      props.history.push("/post")
+      props.history.push("/post/este_id_no_existe")
   }
 
   const bull = <span className={classes.bullet}>•</span>;

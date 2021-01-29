@@ -18,9 +18,9 @@ export default function IconBreadcrumbs() {
         </Typography>
         <Typography variant="subtitle2">
             <Link to="/aviso">Aviso de privacidad</Link><br/>
-            <Link >Contacto</Link><br/>
-            <Link >Normas y Reglas</Link><br/>
-            <Link >Preguntas Frecuentes</Link><br/>
+            <Link to="/contacto">Contacto</Link><br/>
+            {/* <Link >Normas y Reglas</Link><br/> */}
+            <Link to="/preguntas_frecuentes">Preguntas Frecuentes</Link><br/>
         </Typography>
       </Grid>
 

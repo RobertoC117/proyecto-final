@@ -299,6 +299,7 @@ export const cerrarSesion = () => async(dispatch) =>{
         })
         localStorage.removeItem('userData')
         localStorage.removeItem('breadcrumbs')
+        localStorage.removeItem('filtros')
         
     } catch (error) {
         dispatch({

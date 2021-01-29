@@ -14,20 +14,21 @@ import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import ListItemText from '@material-ui/core/ListItemText';
-//Filtros
+import InputAdornment from '@material-ui/core/InputAdornment';
+import Grid from '@material-ui/core/Grid';
+
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Radio from '@material-ui/core/Radio';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import Grid from '@material-ui/core/Grid';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import Checkbox from '@material-ui/core/Checkbox';
+
 //iconos
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
@@ -41,90 +42,12 @@ import InicioIcon from '@material-ui/icons/Home';
 import CategoryIcon from '@material-ui/icons/Category';
 import AboutIcon from '@material-ui/icons/Info';
 import SettingsIcon from '@material-ui/icons/Settings';
-import Guardados from '@material-ui/icons/Bookmarks';
-import Repositorio from '@material-ui/icons/Inbox';
-import Mispost from '@material-ui/icons/LibraryBooks';
-import FilterIcon from '@material-ui/icons/FilterList'
-import Logo from './img/Logo.png'
-
-//Bookmarks, Inbox, LibraryBooks
-
-/**MIS IMPORTACIONES */
-import { withRouter, useLocation } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import { cerrarSesion } from '../redux/userDuck'
-import { EstablecerFiltros, nuevamente } from '../redux/postDuck'
+import FilterIcon from '@material-ui/icons/FilterList';
 
 const drawerWidth = 240;
 
 // HEADER
-const PrimarySearchAppBar = (props)=> {
-
-  const dispatch = useDispatch();
-  const active = useSelector(store => store.user.active)
-  const filtros = useSelector(store => store.posts.config_busqueda)
-  let location = useLocation()
-  const [texto, setTexto] = React.useState("")
-  const [values, setValues] = React.useState({
-      type: filtros.type || "temas",
-      //texto: "",
-      lenguaje: filtros.lenguaje || "todos",
-      fecha: filtros.fecha || "todos",
-      descendente: filtros.descendente || true
-  })
-
-  const [temp, setTemp]  = React.useState({})
-
-  const handleChangeTemp = (prop) => (event) => {
-    setTemp({ ...temp, [prop]: event.target.value });
-  };
-
-  const handleChangeCheckTemp = (event) => {
-    setTemp({ ...temp, [event.target.name]: event.target.checked });
-  };
-
-  const handleChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
-  };
-
-  const handleChangeCheck = (event) => {
-    setValues({ ...values, [event.target.name]: event.target.checked });
-  };
-
-  const logout = () =>{
-    dispatch(cerrarSesion())
-    props.history.push('/')
-  }
-
-  const buscar = () =>{
-    //direccion("busqueda="+texto+"&tipo=:tipo&lenguaje=:leng&tiempo=:time&desc=:desc)
-    dispatch(nuevamente())
-    direccion("/busqueda/" + texto)
-  }
-
-  const setFiltros = () =>{
-    dispatch(EstablecerFiltros(values))
-    handleDialogClose()
-  }
-
-  const restaurarFiltros = () =>{
-    dispatch(EstablecerFiltros({
-      type: "temas",
-      lenguaje: "todos",
-      fecha: "todos",
-      descendente: true
-    }))
-    handleDialogClose()
-  }
-
-  const direccion = (adress) =>{
-    props.history.push(adress)
-  }
-
-  // React.useEffect(()=>{
-  //   console.log(location.pathname)
-  // }, [location])
-
+export default function PrimarySearchAppBar() {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);  
@@ -133,6 +56,7 @@ const PrimarySearchAppBar = (props)=> {
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
   const [Dialogopen, setDialogOpen] = React.useState(false);
 
   const handleProfileMenuOpen = (event) => {
@@ -162,16 +86,7 @@ const PrimarySearchAppBar = (props)=> {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={() => { 
-        direccion('/perfil')
-        handleMenuClose()
-       }}>
-         Mi Perfil
-      </MenuItem>
-      <MenuItem onClick={()=> {
-        logout()
-        handleMenuClose()
-      }}>Cerrar Sesion</MenuItem>
+      <MenuItem onClick={handleMenuClose}>Mi Perfil</MenuItem>
     </Menu>
   );
 
@@ -210,7 +125,6 @@ const PrimarySearchAppBar = (props)=> {
   };
 
   const handleDialogOpen = () => {
-    setValues({...values, type: filtros.type, lenguaje: filtros.lenguaje, fecha: filtros.fecha, descendente:filtros.descendente})
     setDialogOpen(true);
   };
 
@@ -222,32 +136,27 @@ const PrimarySearchAppBar = (props)=> {
     <div className={classes.grow}>
       <AppBar position="static" className={classes.header}>
         <Toolbar>
-          {
-            active&&(
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={handleDrawerOpen}
-              edge="start"
-              className={clsx(classes.menuButton, open && classes.hide)}
-            >
-              <MenuIcon />
-            </IconButton>
-            )
-          }
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            edge="start"
+            className={clsx(classes.menuButton, open && classes.hide)}
+          >
+            <MenuIcon />
+          </IconButton>
           <div className={classes.image}>
-           <img className={classes.img} alt="Logotipo" src={Logo} onClick={() =>{active ? (direccion('/main')):(direccion('/'))}}/>
+            <img className={classes.img} alt="Logotipo" src="a" />
           </div>
-          {/* <Typography className={classes.title} variant="h6" noWrap>
+          <Typography className={classes.title} variant="h6" noWrap>
             Inicio
-          </Typography> */}
+          </Typography>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>
             <InputBase
-              placeholder="Buscar por palabras clave"
-              onChange={(e) => setTexto(e.target.value)}
+              placeholder="Buscar"
               classes={{
                 root: classes.inputRoot,
                 input: classes.inputInput, }}
@@ -260,39 +169,25 @@ const PrimarySearchAppBar = (props)=> {
                 </InputAdornment>
                 }
               />
-            <Button style={{color:'white'}} onClick={() =>{buscar()}} >Buscar</Button>
-            {console.log(texto)}
           </div>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            {!active &&(
-              <>
-              {location.pathname != '/login' &&(
-                <IconButton edge="end">
-                  <Button style={{ color: '#FFFFFF'}} onClick={() =>{direccion('/login')}}>Iniciar Sesión</Button>
-                </IconButton>
-              )}
-              {location.pathname != '/registro' &&(
-                <IconButton edge="end">
-                  <Button style={{ color: '#FFFFFF'}} onClick={() =>{direccion('/registro')}}>Registrarse</Button>            
-                </IconButton>
-              )}
-              </>
-            )}
-            
-            {active &&(
-                <IconButton
-                  edge="end"
-                  aria-label="account of current user"
-                  aria-controls={menuId}
-                  aria-haspopup="true"
-                  onClick={handleProfileMenuOpen}
-                  color="inherit"
-                >
-                  <AccountCircle />
-                </IconButton>
-                )
-            }
+            <IconButton edge="end">
+              <Button style={{ color: '#FFFFFF'}}>Iniciar Sesión</Button>
+            </IconButton>
+            <IconButton edge="end">
+              <Button style={{ color: '#FFFFFF'}}>Registrarse</Button>            
+            </IconButton>
+            <IconButton
+              edge="end"
+              aria-label="account of current user"
+              aria-controls={menuId}
+              aria-haspopup="true"
+              onClick={handleProfileMenuOpen}
+              color="inherit"
+            >
+            <AccountCircle />
+            </IconButton>
           </div>
           <div className={classes.sectionMobile}>
             <IconButton
@@ -307,117 +202,81 @@ const PrimarySearchAppBar = (props)=> {
           </div>
         </Toolbar>
       </AppBar>
-      {
-        active&&(<Drawer
-                  className={classes.drawer}
-                  variant="persistent"
-                  anchor="left"
-                  open={open}
-                  classes={{
-                    paper: classes.drawerPaper,
-                  }}
-                >
-                  <div className={classes.drawerHeader}>
-                    <IconButton onClick={handleDrawerClose}>
-                      {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-                    </IconButton>
-                  </div>
-                  <Divider />
-                  <List>
-                    {/* {['Inicio', 'Categorías'].map((text, index) => (
-                      <ListItem button key={text}>
-                        <ListItemIcon>{index % 2 === 0 ? <InicioIcon /> : <CategoryIcon />}</ListItemIcon>
-                        <ListItemText primary={text} />
-                      </ListItem>
-                    ))} */}
-                    <ListItem button onClick={() => direccion("/main")}>
-                      <ListItemIcon>{<InicioIcon />}</ListItemIcon>
-                      <ListItemText primary={"Inicio"} />
-                    </ListItem>
-                    {/* <ListItem button >
-                      <ListItemIcon>{<CategoryIcon />}</ListItemIcon>
-                      <ListItemText primary={"Categorias"} />
-                    </ListItem> */}
-                    <ListItem button onClick={() => direccion("/repositorio")}>
-                      <ListItemIcon>{<Repositorio />}</ListItemIcon>
-                      <ListItemText primary={"Mi repositorio"} />
-                    </ListItem>
-                    <ListItem button onClick={() => direccion("/main")}>
-                      <ListItemIcon>{<Guardados />}</ListItemIcon>
-                      <ListItemText primary={"Elementos guardados"} />
-                    </ListItem>
-                  </List>
-                  <Divider />
-                  <List>
-                    {/* {['Acerca de', 'Opciones'].map((text, index) => (
-                      <ListItem button key={text}>
-                        <ListItemIcon>{index % 2 === 0 ?  <AboutIcon /> : <SettingsIcon />}</ListItemIcon>
-                        <ListItemText primary={text} />
-                      </ListItem>
-                    ))} */}
-                    <ListItem button onClick={() => direccion("/ajustes")}>
-                        <ListItemIcon>{<SettingsIcon/>}</ListItemIcon>
-                        <ListItemText primary={"Configuraciones"} />
-                    </ListItem>
-                  </List>
-                </Drawer>)
-      }
+      <Drawer
+        className={classes.drawer}
+        variant="persistent"
+        anchor="left"
+        open={open}
+        classes={{
+          paper: classes.drawerPaper,
+        }}
+      >
+        <div className={classes.drawerHeader}>
+          <IconButton onClick={handleDrawerClose}>
+            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+          </IconButton>
+        </div>
+        <Divider />
+        <List>
+          {['Inicio', 'Categorías'].map((text, index) => (
+            <ListItem button key={text}>
+              <ListItemIcon>{index % 2 === 0 ? <InicioIcon /> : <CategoryIcon />}</ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItem>
+          ))}
+        </List>
+        <Divider />
+        <List>
+          {['Acerca de', 'Opciones'].map((text, index) => (
+            <ListItem button key={text}>
+              <ListItemIcon>{index % 2 === 0 ?  <AboutIcon /> : <SettingsIcon />}</ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItem>
+          ))}
+        </List>
+      </Drawer>
       {renderMobileMenu}
       {renderMenu}
       <Dialog open={Dialogopen} onClose={handleDialogClose} aria-labelledby="form-dialog-title">
-        {/* {values.texto} */}
-        <DialogTitle id="form-dialog-title">Busqueda Avanzada</DialogTitle>
+        <DialogTitle id="form-dialog-title">Filtros o algo no sé</DialogTitle>
         <DialogContent>          
           <Grid container direction="row" justify="center" alignItems="center">
             <FormControl component="fieldset">
-              {/* {values.type} */}
-              <RadioGroup value={values.type} onChange={handleChange("type")}>
-                <FormControlLabel value="autor" control={<Radio />} label="Autor" />
-                <FormControlLabel value="temas" control={<Radio />} label="Temas" />
-                <FormControlLabel value="leng_date" control={<Radio />} label="Lenguaje y Fecha" />
-                {/* <FormControlLabel value="leng" control={<Radio />} label="Solo Lenguaje" />
-                <FormControlLabel value="date" control={<Radio />} label="Solo fecha" /> */}
+              <RadioGroup>
+                <FormControlLabel value="1" control={<Radio />} label="Autor" />
+                <FormControlLabel value="2" control={<Radio />} label="Temas" />
+                <FormControlLabel value="3" control={<Radio />} label="Lenguaje y Fecha" />
+                <FormControlLabel value="4" control={<Radio />} label="Solo Lenguaje" />
+                <FormControlLabel value="5" control={<Radio />} label="Solo fecha" />
               </RadioGroup>
             </FormControl>
             <Divider orientation="vertical" flexItem />
             <Grid direction="column" justify="center" alignItems="center" style={{ margin: theme.spacing(1) }} >
               <FormControl className={classes.formControl}>
-                {/* {values.lenguaje} */}
                 <InputLabel> Lenguaje </InputLabel>
-                <Select value={values.lenguaje} onChange={handleChange("lenguaje")}>
-                  <MenuItem value="todos" > Todos </MenuItem>
-                  <MenuItem value="javascript" > JavaScript </MenuItem>
-                  <MenuItem value="java" > Java </MenuItem>
-                  <MenuItem value="php" > PHP </MenuItem>
-                  <MenuItem value="python" > Python </MenuItem>
-                  <MenuItem value="c#" > C# </MenuItem>
-                  {/* <MenuItem value="ruby" > Ruby </MenuItem> */}
+                <Select>
+                  <MenuItem value="3" > Todos </MenuItem>
+                  <MenuItem value="1" > Java </MenuItem>
+                  <MenuItem value="2" > PHP </MenuItem>
                 </Select>
               </FormControl>
               <br />
               <FormControl className={classes.formControl}>
-                {/* {values.fecha} */}
                 <InputLabel> Fecha </InputLabel>
-                <Select value={values.fecha} onChange={handleChange("fecha")}>
-                  <MenuItem value="todos" > Todos </MenuItem>
-                  <MenuItem value="semana_pasada" > Semana Pasada </MenuItem>
-                  <MenuItem value="mes_pasado" > Mes Pasado </MenuItem>
+                <Select>
+                  <MenuItem value="1" > Todos </MenuItem>
+                  <MenuItem value="2" > Semana Pasada </MenuItem>
+                  <MenuItem value="3" > Mes Pasado </MenuItem>
                 </Select>
               </FormControl>
               <br />
-              {/* {values.descendente} */}
-              {/* CHECK BOX */}
-              {/* <FormControlLabel className={classes.checkbox} control={<Checkbox name="descendente" checked={values.descendente} onChange={handleChangeCheck} />} label="Descendente" /> */}
+              <FormControlLabel className={classes.checkbox} control={<Checkbox name="1" />} label="Desc" />
             </Grid>
           </Grid>
         </DialogContent>
-        {/* {
-          console.log(values)
-        } */}
         <DialogActions>
-          <Button onClick={restaurarFiltros} color="primary"> Restaurar Filtros </Button>
           <Button onClick={handleDialogClose} color="primary"> Cancelar </Button>
-          <Button onClick={setFiltros} color="primary"> Aceptar </Button>
+          <Button onClick={handleDialogClose} color="primary"> Aceptar </Button>
         </DialogActions>
       </Dialog>
     </div>
@@ -562,5 +421,3 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(2),
   },
 }));
-
-export default withRouter(PrimarySearchAppBar)

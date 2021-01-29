@@ -19,9 +19,9 @@ const Main = () => {
     
     return (
         <div>
-            <Nuevo/>
+            {/* <Nuevo/>
             <br/>
-            <br/>
+            <br/> */}
             <br/>
             <Grid container direction="column" justify="center" alignItems="center" variant="outlined" >
                 <Post nombre="Alondra" fecha="01/Diciembre/2020"/><br/>

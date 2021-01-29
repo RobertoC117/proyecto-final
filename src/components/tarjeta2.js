@@ -14,6 +14,7 @@ import FavoriteBorder from "@material-ui/icons/FavoriteBorder";
 
 export default function Tarjeta(props) {
   const classes = useStyles();
+  let fecha = new Date(props.fecha*1000).toString();
   return (
     <Grid item xs={5}>
       <Card className={classes.root}>
@@ -25,19 +26,15 @@ export default function Tarjeta(props) {
                 {props.nombre}
               </Typography>
               <Typography className={classes.title} color="textSecondary" gutterBottom>
-                {props.fecha}
+                {fecha}
               </Typography>
             </Grid>
           </Grid>
           <Typography variant="h5" component="h2">
-            Título
+            {props.titulo}
           </Typography>
           <Typography variant="body2" component="p">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Rhoncus
-            dolor purus non enim praesent elementum facilisis leo vel. Risus at
-            ultrices mi tempus imperdiet. Semper risus in hendrerit gravida
-            rutrum quisque non tellus.
+            {props.texto}
           </Typography>
         </CardContent>
         <CardActions justify="space-between" s>

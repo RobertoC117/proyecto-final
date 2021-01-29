@@ -2,7 +2,7 @@ import { createStore, combineReducers, compose, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 
 import userReducer,{ mantenerUserState } from './userDuck';
-import postReducer from './postDuck'
+import postReducer, { mantenerPostState } from './postDuck'
 
 const rootReducer = combineReducers({
     user: userReducer,
@@ -14,5 +14,6 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 export default function generateStore(){
     const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)))
     mantenerUserState()(store.dispatch)
+    mantenerPostState()(store.dispatch)
     return store;
 }

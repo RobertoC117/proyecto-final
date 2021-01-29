@@ -1,35 +1,63 @@
 import React from 'react'
 import Nuevo from './NewPost'
 import Post from './tarjeta2'
+import NotFound from './NotFound'
 import {Grid} from '@material-ui/core';
 import {useDispatch, useSelector} from 'react-redux'
 import { AddBreadcrum } from '../redux/userDuck'
-import { useLocation } from 'react-router-dom'
-import { busquedaAutor_Lenguaje, busquedaTags_Lenguaje, busquedaLenguaje_UltimoMes, busquedaLenguaje_UltimaSemana} from '../redux/postDuck'
+import { useLocation, useParams } from 'react-router-dom'
+import { busquedaAutor_Lenguaje, Buscar} from '../redux/postDuck'
 
 const Busqueda = () => {
     const dispatch = useDispatch();
     const path = useLocation().pathname;
-    const migajas = useSelector(store => store.user.breadcrumbs)
-    const posts = useSelector(store => store.posts)
+    const again = useSelector(store => store.posts.again)
+    const resultados = useSelector(store => store.posts.resultados)
+    const {word} = useParams();
     
     React.useEffect(()=>{
-        dispatch(AddBreadcrum("Busqueda", path))
-        dispatch(busquedaLenguaje_UltimoMes())
-    },[])
+        dispatch(AddBreadcrum("Busqueda/"+word, path))
+        dispatch(Buscar(word))
+    },[word, again])
     
     
     return (
-        <div>
+        resultados ? 
+        (<div>
+            {resultados.length > 0 ? <>
             <br/>
+            <center><h2>Resultados de Busqueda</h2></center>
             <br/>
             <Grid container direction="column" justify="center" alignItems="center" variant="outlined" >
-                <Post nombre="Alondra" fecha="01/Diciembre/2020"/><br/>
+                {
+                    resultados.map(item => <><Post nombre={item.autor[0] + " " + item.autor[1]} fecha={item.fecha.seconds} texto={item.texto} titulo={item.titulo}/><br/></>)
+                }
+                {/* <Post nombre="Alondra" fecha="01/Diciembre/2020"/><br/>
                 <Post nombre="Juan" fecha="30/Noviembre/2020"/><br/>
                 <Post nombre="Jose" fecha="30/Noviembre/2020"/><br/>
-                <Post nombre="Roberto" fecha="29/Noviembre/2020"/><br/>
+                <Post nombre="Roberto" fecha="29/Noviembre/2020"/><br/> */}
             </Grid>
-        </div>
+            </>:
+            <>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <NotFound title="Ups!" texto="Parece que no se encontraron resultados de la busqueda"/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+            </>
+            }
+        </div>):
+        (<div>
+            <h1>CARGANDO DATOS.....</h1>
+        </div>)
     )
 }
 

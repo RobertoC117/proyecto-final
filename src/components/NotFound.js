@@ -5,13 +5,13 @@ import Typography from '@material-ui/core/Typography';
 // icnos
 import ErrorIcon from '@material-ui/icons/Error';
 
-export default function Errorpage() {
+export default function Errorpage(props) {
   const classes = useStyles();
   return (
     <Grid container direction="column" justify="center" alignItems="center"  className={classes.root}>
         <ErrorIcon className={classes.icon} />
-      <Typography variant="h3"> Error </Typography>
-      <Typography variant="h5"> La página no se encontró </Typography>
+      <Typography variant="h3"> {props.title} </Typography>
+      <Typography variant="h5"> {props.texto} </Typography>
     </Grid>
   );
 }
