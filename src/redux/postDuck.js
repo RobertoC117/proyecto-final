@@ -33,6 +33,23 @@ export default function postReducer(state = dataInicial, action){
     }
 }
 
+export const crearNuevoPost = (ObjPost) => async(dispatch, getState) =>{
+    try {
+        const id_post = new Date().getTime();
+        const {email} = getState().user.userdata
+        ObjPost ={...ObjPost, id_post}
+
+        await db.collection("publicaciones").doc(id_post).set(ObjPost)
+        let datosUsuario = JSON.parse(localStorage.getItem('userData'))
+        datosUsuario.posts.push(id_post)
+        await db.collection("usuarios").doc(email).update({posts: datosUsuario.posts})
+        localStorage.setItem('userData', JSON.stringify(datosUsuario))
+        
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 export const EstablecerFiltros = (filtros) => async(dispatch, getState) =>{
     dispatch({
         type: LOADING
@@ -59,6 +76,13 @@ export const Buscar = (texto) => async(dispatch, getState) =>{
         }else if(fecha === "mes_pasado"){
             fecha_busqueda.setMonth(fecha_busqueda.getMonth() - 1)
         }
+        fecha_busqueda.setHours(0)
+        fecha_busqueda.setMinutes(0)
+        fecha_busqueda.setSeconds(0)
+        fecha_busqueda.setMilliseconds(0)
+        fecha_busqueda = fecha_busqueda.getTime()
+
+        console.log(fecha_busqueda)
 
         switch (type) {
             case "autor":
@@ -417,7 +441,7 @@ export const nuevamente = () => async (dispatch, getState) =>{
     }
 }
 
-
+//#region  BASURA
 export const busquedaAutor_Lenguaje = (autor, lenguaje) => async (dispatch, getState) => {
 
     try {
@@ -492,6 +516,7 @@ export const busquedaLenguaje_UltimoMes = (lenguaje) => async (dispatch, getStat
     }
 
 }
+//#endregion
 
 
 export const mantenerPostState = () => (dispatch) =>{

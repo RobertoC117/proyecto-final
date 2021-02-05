@@ -30,7 +30,7 @@ const Busqueda = () => {
             <br/>
             <Grid container direction="column" justify="center" alignItems="center" variant="outlined" >
                 {
-                    resultados.map(item => <><Post nombre={item.autor[0] + " " + item.autor[1]} fecha={item.fecha.seconds} texto={item.texto} titulo={item.titulo}/><br/></>)
+                    resultados.map(item => <><Post nombre={item.autor[0] + " " + item.autor[1]} fecha={item.fecha} texto={item.texto} titulo={item.titulo}/><br/></>)
                 }
                 {/* <Post nombre="Alondra" fecha="01/Diciembre/2020"/><br/>
                 <Post nombre="Juan" fecha="30/Noviembre/2020"/><br/>

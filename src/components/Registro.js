@@ -30,8 +30,14 @@ const InputAdornments = (props) => {
   const msg = useSelector(store => store.user.msg)
 
   const classes = useStyles();
+  const ExpRegPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])([A-Za-z\d$@$!%*?&]|[^ ]){8,15}$/;
+  const ExpRegEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/;
+  const ExpRegNombre = /^[ÁÉÍÓÚA-Z][a-záéíóú]+(\s+[ÁÉÍÓÚA-Z]?[a-záéíóú]+)*$/
+  //const ExpRegNombre = /^(?=.{3,45}$)[A-ZÁÉÍÓÚ][a-zñáéíóú]+(?: [A-ZÁÉÍÓÚ][a-zñáéíóú]+)+(?: [A-ZÁÉÍÓÚ][a-zñáéíóú]+)?$/
+  const ExpRegUserName = /(^[0-9a-zA-Z_-]{6,20})+$/;
   const [values, setValues] = React.useState({
     username: "",
+    nombre: "",
     password: "",    
     email: "",
     showPassword: false,
@@ -60,15 +66,45 @@ const InputAdornments = (props) => {
         title:"ERROR",
         body:""
       }
-      if(!values.username.trim() || !values.password.trim() || !values.email.trim())
+      if(!values.username.trim() || !values.nombre.trim() || !values.password.trim() || !values.email.trim())
       {
         mensaje.body = "Rellene todos los campos"
         dispatch(createNewMsg(mensaje))
         return
       }
-      else if(values.password.length < 8 || values.password.length > 16)
+      else if(!ExpRegEmail.test(values.email))
       {
-        mensaje.body = "La contraseña debe contener entre 8 y 16 caracteres";
+        mensaje.body = "Ingrese un email valido";
+        dispatch(createNewMsg(mensaje))
+        return
+      }
+      else if(!ExpRegNombre.test(values.nombre))
+      {
+        mensaje.body = 'Los nombre propios solo pueden contener letras y comienzan siempre con mayuscula, el nombre puede contener de 3-45 caracteres';
+        dispatch(createNewMsg(mensaje))
+        return
+      }
+      else if(values.nombre.length > 45)
+      {
+        mensaje.body = 'El nombre es muy largo';
+        dispatch(createNewMsg(mensaje))
+        return
+      }
+      else if(values.nombre.length < 3)
+      {
+        mensaje.body = 'El nombre es muy corto';
+        dispatch(createNewMsg(mensaje))
+        return
+      }
+      else if(!ExpRegUserName.test(values.username))
+      {
+        mensaje.body = "El nombre de usuario solo puede contener caracteres A-Z, a-z, 0-9, -, _ y tener una longitud de 6 a 20 caracteres";
+        dispatch(createNewMsg(mensaje))
+        return
+      }
+      else if(!ExpRegPass.test(values.password))
+      {
+        mensaje.body = "La contraseña debe contener al menos un caracter A-Z, a-z, 0-9, algun caracter especial($@!%*?&) y tener una longitud de 8 a 15 caracteres";
         dispatch(createNewMsg(mensaje))
         return
       }
@@ -105,6 +141,13 @@ const InputAdornments = (props) => {
                       className={clsx(classes.margin, classes.textField)} 
                       variant="filled"
                       onChange={handleChange("username")} 
+              />
+              <br/>
+              <TextField 
+                      label="Nombre" 
+                      className={clsx(classes.margin, classes.textField)} 
+                      variant="filled"
+                      onChange={handleChange("nombre")} 
               />
               <br/>
               <TextField 

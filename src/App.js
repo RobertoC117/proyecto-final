@@ -12,13 +12,16 @@ import Inicio from './components/Home'
 import Ajustes from './components/Ajustes'
 import { BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom'
 import {auth} from './config/firebase'
-import Main from './components/Main'
+import Main2 from './components/Main2.jsx'
 import React from 'react'
 import BreadBar from './components/BreadBar'
 import NotFound from './components/NotFound'
 import Busqueda from './components/Busqueda'
 import Preguntas from './components/PreguntasFrec'
 import Contacto from './components/Contacto'
+import Main from './components/Main.js'
+import PruebaEmail from './components/PruebaEmail'
+import RecibirParametrosPrueba from './components/RecibirParametrosPrueba'
 import { Grid } from '@material-ui/core'
 
 function App() {
@@ -85,12 +88,27 @@ function App() {
           <Route path='/aviso'>
             <Aviso/>
           </Route>
+          {//#region BORRAR
+          }
+          <Route path='/prueba_email'>
+            <PruebaEmail/>
+          </Route>
+
+          <Route path='/prueba/code=:code&key=:key'>
+            <RecibirParametrosPrueba/>
+          </Route>
+          {
+            //#endregion
+          }
           <Route path='/contacto'>
             <Contacto/>
           </Route>
           <Route path='/preguntas_frecuentes'>
             <Preguntas/>
           </Route>
+          {/* <Route path='/main2'>
+            <Main/>
+          </Route> */}
           {/* PARA LA RUTA QUE NO EXISTE */}
           <Route path='*'>
             <NotFound title={"Error 404 "} texto={"La página no se encontró "}/>

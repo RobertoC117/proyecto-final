@@ -117,6 +117,20 @@ export const registrar = (values) => async(dispatch)=>{
         const email = values.email;
         const password = values.password;
         const username = values.username;
+        const nombre = values.nombre
+        const res = await db.collection("usuarios").where("username", "==", username).get()
+        console.log(res.docs.length)
+        if(res.docs.length > 0){
+            dispatch({
+                type: USER_MSG,
+                payload:{
+                    type:"error",
+                    title:"ERROR",
+                    body:"Este nombre de usuario ya esta en uso"
+                }
+            })
+            return
+        }
         const response = await auth.createUserWithEmailAndPassword(email, password)
         //console.log(response.user)
         const encriptada = CryptoJS.Rabbit.encrypt(password, response.user.uid).toString()
@@ -125,7 +139,8 @@ export const registrar = (values) => async(dispatch)=>{
             email: response.user.email,
             password: encriptada,
             uid: response.user.uid,
-            nombre:null,
+            posts:[],
+            nombre,
             twitter:null,
             ubicacion:null,
             company:null,
@@ -319,8 +334,53 @@ export const createNewMsg = (msg) => async(dispatch) =>{
     }
 }
 
-export const deleteMsg = () => async(dispatch) =>{
-    //NO SE QUE HACER PARA BORRAR LOS MENSAJES Y QUE NO SE QUEDE ALLI
+export const deleteMsg = (time = 0) => async(dispatch) =>{
+    try {
+        setTimeout(()=>{
+            dispatch({
+                type: USER_MSG,
+                payload:null
+            })
+        }, time)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const EnviarEmailEjemplo = () => async(dispatch) =>{
+    try {
+        const actionCodeSettings = {
+            url: "http://localhost:3000/prueba/code=91203727310701&key=afbkjfbabdkajbkja",
+            handleCodeInApp: true
+        }
+        const email = "rycesoh.080314@gmail.com"
+        await auth.sendSignInLinkToEmail(email, actionCodeSettings)
+        localStorage.setItem('email_prueba', email)
+        console.log("TODO OK")
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const VerificarEmailEjemplo = (url) => async(dispatch) =>{
+    try {
+        if(auth.isSignInWithEmailLink(url)){
+            let email = localStorage.getItem('email_prueba')
+            if(!email)
+            {
+                //MENSAJE DE ERROR y return
+                console.log("NO EXISTE EL OBJETO EMAIL EN EL LOCAL STORAGE")
+            }else{
+                //REGISTRO Y DISPATCH DE EXITO
+                console.log("TODO SALIO BIEN MI PANA")
+                localStorage.removeItem('email_prueba')
+            }
+        }else{
+            console.log("Esta no es un URL valida")
+        }
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 export const AddBreadcrum = (name, path) => (dispatch, getState) =>{
@@ -330,7 +390,7 @@ export const AddBreadcrum = (name, path) => (dispatch, getState) =>{
         let exist = bread.findIndex(item => item.path === path)
         if(exist != -1){
 
-            console.log(exist)
+            //console.log(exist)
             let migaja;
             if(exist !== 0){
                 migaja = bread.splice(exist, 1);
@@ -358,6 +418,38 @@ export const AddBreadcrum = (name, path) => (dispatch, getState) =>{
         dispatch({
             type: BREADCRUMBS,
             payload: bread
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const crearNuevoPost = (ObjPost) => async(dispatch, getState) =>{
+    dispatch({
+        type: LOGIN,
+    })
+    try {
+        // ObjPost = {
+        //     titulo: "prueba",
+        //     texto: "prueba",
+        //     lenguaje: "prueba",
+        //     tags: ["prueba1", "prueba2"]
+        // }
+        const {email, uid, nombre} = getState().user.userdata
+        const id_post = uid.slice(0,4) + new Date().getTime();
+        const id_autor = uid;
+        let autor = nombre.split(' ').map(item => item.toUpperCase()) 
+        ObjPost ={...ObjPost, autor, id_post, fecha: new Date().getTime(), id_autor}
+
+        await db.collection("publicaciones").doc(id_post.toString()).set(ObjPost)
+        let datosUsuario = JSON.parse(localStorage.getItem('userData'))
+        datosUsuario.posts.push(id_post)
+        
+        await db.collection("usuarios").doc(email).update({posts: datosUsuario.posts})
+        localStorage.setItem('userData', JSON.stringify(datosUsuario))
+        dispatch({
+            type: USER_EXITO,
+            payload: datosUsuario
         })
     } catch (error) {
         console.log(error)

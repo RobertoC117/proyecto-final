@@ -374,7 +374,7 @@ const PrimarySearchAppBar = (props)=> {
               <RadioGroup value={values.type} onChange={handleChange("type")}>
                 <FormControlLabel value="autor" control={<Radio />} label="Autor" />
                 <FormControlLabel value="temas" control={<Radio />} label="Temas" />
-                <FormControlLabel value="leng_date" control={<Radio />} label="Lenguaje y Fecha" />
+                {/* <FormControlLabel value="leng_date" control={<Radio />} label="Lenguaje y Fecha" /> */}
                 {/* <FormControlLabel value="leng" control={<Radio />} label="Solo Lenguaje" />
                 <FormControlLabel value="date" control={<Radio />} label="Solo fecha" /> */}
               </RadioGroup>

@@ -28,8 +28,20 @@ export default function Perfil() {
   const msg = useSelector(store => store.user.msg)
   const loading = useSelector(store => store.user.loading)
   const path = useLocation().pathname;
+  const ExpRegPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])([A-Za-z\d$@$!%*?&]|[^ ]){8,15}$/;
+  const ExpRegNombre = /^(?=.{3,45}$)[A-ZÁÉÍÓÚ][a-zñáéíóú]+(?: [A-ZÁÉÍÓÚ][a-zñáéíóú]+)+(?: [A-ZÁÉÍÓÚ][a-zñáéíóú]+)?$/
+  const ExpRegTwitter = /@([A-Za-z0-9_]{1,15})/;
+  const ExpRegCompany = /^(?=.{1,25}$)[A-ZÁÉÍÓÚa-zñáéíóú0-9]+(?: [A-ZÁÉÍÓÚa-zñáéíóú0-9]+)?$/
+  const ExpRegWeb = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/ ;
+  const ExpRegUbicacion = /^(?=.{2,45}$)[A-ZÁÉÍÓÚa-zñáéíóú,.]+(?: [A-ZÁÉÍÓÚa-zñáéíóú,.]+)+(?: [A-ZÁÉÍÓÚa-zñáéíóú,.]+)?$/;
+  const mensajeTwitter = "Los nombres de usuarios de twitter comienzan con el caracter @";
+  const mensajeCompany = "El nombre de la compañia solo puede contener caracteres A-Z, a-z y 0-9"
+  const mensajeWeb = "Esta no es una URL valida"
+  const mensajeUbicacion = "El nombre de la ubicacion no puede contener numeros o caracteres especiales"
+
   React.useEffect(()=>{
       dispatch(AddBreadcrum("Perfil", path))
+      console.log("1")
   },[])
   
   const [values, setValues] = React.useState({
@@ -39,11 +51,11 @@ export default function Perfil() {
   });
 
   const [datos, setDatos] = React.useState({
-    nombre: datosUsuario.nombre,
-    twitter: datosUsuario.twitter,
-    ubicacion: datosUsuario.ubicacion,
-    website: datosUsuario.website,
-    company: datosUsuario.company,
+    nombre: datosUsuario.nombre || "",
+    twitter: datosUsuario.twitter || "",
+    ubicacion: datosUsuario.ubicacion || "",
+    website: datosUsuario.website || "",
+    company: datosUsuario.company || "",
   })
 
   const [password, setPassword] = React.useState({
@@ -75,11 +87,11 @@ export default function Perfil() {
 
   const resetDataState = () =>{
     setDatos({
-      nombre: datosUsuario.nombre,
-      twitter: datosUsuario.twitter,
-      ubicacion: datosUsuario.ubicacion,
-      website: datosUsuario.website,
-      company: datosUsuario.company,
+      nombre: datosUsuario.nombre || "",
+      twitter: datosUsuario.twitter || "",
+      ubicacion: datosUsuario.ubicacion || "",
+      website: datosUsuario.website || "",
+      company: datosUsuario.company || "",
     })
   }
 
@@ -108,13 +120,59 @@ export default function Perfil() {
     setExpanded2(false);
   }
 
+  const validarNombre = (nombre) =>{
+      let mensaje={
+        type:"error",
+        title:"ERROR",
+        body: ""
+      }
+      if(!nombre.trim()){
+        mensaje.body = "El valor del nombre no puede ser un campo vacio"
+        dispatch(createNewMsg(mensaje))
+        return false;
+      }
+      else if(!ExpRegNombre.test(nombre))
+      {
+        mensaje.body = 'Recuerde que los nombre propios solo pueden contener letras y comienzan siempre con mayuscula \n se necesita al menos 3 caracteres por palabra si es un nombre compuesto'
+        dispatch(createNewMsg(mensaje))
+        return false;
+      }
+      return true;
+  }
+
+  const validarCampo = (valor, ExpReg, mensajeError) =>{
+      if(valor === null || !valor.trim())
+        return true;
+      if(!ExpReg.test(valor))
+      {
+        let mensaje={
+          type:"error",
+          title:"ERROR",
+          body: mensajeError
+        }
+        dispatch(createNewMsg(mensaje))
+        return false;
+      }
+      return true;
+  }
+
   const guardarCambios = () =>{
     if(values.editadatos)
     {
-      for (const key in datos) {
-        if (datos[key] === '') {
+      if(!validarNombre(datos.nombre))
+        return
+      else if(!validarCampo(datos.twitter, ExpRegTwitter, mensajeTwitter))
+        return
+      else if(!validarCampo(datos.ubicacion, ExpRegUbicacion, mensajeUbicacion))
+        return
+      else if(!validarCampo(datos.company, ExpRegCompany, mensajeCompany))
+        return
+      else if(!validarCampo(datos.website, ExpRegWeb, mensajeWeb))
+        return
+
+      for (let key in datos) {
+        if (datos[key] === null || !datos[key].trim())
           datos[key] = null;
-        }
       }
       dispatch(editarDatos(datos))
     }
@@ -143,9 +201,9 @@ export default function Perfil() {
         dispatch(createNewMsg(mensaje));
         return
       }
-      else if(password.newpass.length < 8 || password.newpass.length > 16)
+      else if(ExpRegPassword.test(password.newpass))
       {
-        mensaje.body = "La contraseña debe contener entre 8 y 16 caracteres";
+        mensaje.body = "La contraseña debe contener al menos un caracter A-Z, a-z, 0-9, algun caracter especial($@!%*?&) y tener una longitud de 8-15 caracteres";
         dispatch(createNewMsg(mensaje))
         return
       }
@@ -154,6 +212,7 @@ export default function Perfil() {
        
     }
     resetBoolState();
+    //setValues(values)
   }
 
   const cargarImagen = (img) =>{
@@ -205,7 +264,9 @@ export default function Perfil() {
   return (
     <div className={classes.root}>
       <Grid container direction="column" justify="center" alignItems="center" variant="outlined" >
-        
+        {
+          console.log(datos)
+        }
         <br />
         <Typography component="h5" variant="h5">
           Perfil {values.editable}
@@ -296,7 +357,7 @@ export default function Perfil() {
                     <TextField 
                       label="Ubicacion"
                       disabled={!values.editadatos}
-                      value={datos.ubicacion === null ? "" : datos.ubicacion} 
+                      value={datos.ubicacion} 
                       className={clsx(classes.margininput, classes.textField)} 
                       variant="filled" 
                       onChange={changeState('ubicacion')}
@@ -311,7 +372,7 @@ export default function Perfil() {
                     <TextField 
                       label="Twitter"
                       disabled={!values.editadatos}
-                      value={datos.twitter === null ? "" : datos.twitter} 
+                      value={datos.twitter} 
                       className={clsx(classes.margininput, classes.textField)} 
                       variant="filled" 
                       onChange={changeState('twitter')}
@@ -328,7 +389,7 @@ export default function Perfil() {
                     <TextField
                       label="Nombre"
                       disabled={!values.editadatos}
-                      value={datos.nombre === null ? "" : datos.nombre} 
+                      value={datos.nombre} 
                       className={clsx(classes.margininput, classes.textField)} 
                       variant="filled" 
                       onChange={changeState('nombre')}
@@ -343,7 +404,7 @@ export default function Perfil() {
                     <TextField 
                       label="Compañia"
                       disabled={!values.editadatos}
-                      value={datos.company === null ? "" : datos.company} 
+                      value={datos.company} 
                       className={clsx(classes.margininput, classes.textField)} 
                       variant="filled" 
                       onChange={changeState('company')}
@@ -358,7 +419,7 @@ export default function Perfil() {
                     <TextField 
                       label="Sitio web"
                       disabled={!values.editadatos}
-                      value={datos.website === null ? "" : datos.website} 
+                      value={datos.website} 
                       className={clsx(classes.margininput, classes.textField)} 
                       variant="filled" 
                       onChange={changeState('website')}

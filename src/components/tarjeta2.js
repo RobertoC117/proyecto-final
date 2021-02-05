@@ -14,7 +14,7 @@ import FavoriteBorder from "@material-ui/icons/FavoriteBorder";
 
 export default function Tarjeta(props) {
   const classes = useStyles();
-  let fecha = new Date(props.fecha*1000).toString();
+  let fecha = new Date(props.fecha).toString();
   return (
     <Grid item xs={5}>
       <Card className={classes.root}>

@@ -4,34 +4,31 @@ import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
+import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from '@material-ui/core/Checkbox';
+import Checkbox from "@material-ui/core/Checkbox";
 import Favorite from "@material-ui/icons/Favorite";
-import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
-import { withRouter } from 'react-router-dom'
+import FavoriteBorder from "@material-ui/icons/FavoriteBorder";
 
-
-const Tarjeta = (props) => {
+export default function Tarjeta(props) {
   const classes = useStyles();
-  
-  const redireccion = () =>{
-      props.history.push("/post/este_id_no_existe")
-  }
-
-  const bull = <span className={classes.bullet}>•</span>;
+  let fecha = new Date(props.fecha*1000).toString();
   return (
-    <Grid item xs>
       <Card className={classes.root}>
         <CardContent>
-          <Typography
-            className={classes.title}
-            color="textSecondary"
-            gutterBottom
-          >
-            Fecha - {props.fecha}
-          </Typography>
+          <Grid container direction="row" justify="flex-start" alignItems="center">
+            <Avatar src="#" className={classes.large} />
+            <Grid direction="column" justify="center" alignItems="flex-start">
+              <Typography variant="subtitle1">
+                Nombre de Usuario - {props.autor}
+              </Typography>
+              <Typography className={classes.title} color="textSecondary" gutterBottom>
+                Fecha - {fecha}
+              </Typography>
+            </Grid>
+          </Grid>
           <Typography variant="h5" component="h2">
             Título - {props.titulo}
           </Typography>
@@ -44,10 +41,10 @@ const Tarjeta = (props) => {
             rutrum quisque non tellus.
           </Typography>
         </CardContent>
-        <CardActions justify="space-between" onClick={()=>redireccion()}>
+        <CardActions justify="space-between" s>
           <Button size="small">Ver Más</Button>
           <FormControlLabel
-            style={{ marginLeft: 'auto' }}
+            style={{ marginLeft: "auto" }}
             control={
               <Checkbox
                 icon={<FavoriteBorder />}
@@ -58,16 +55,14 @@ const Tarjeta = (props) => {
           />
         </CardActions>
       </Card>
-    </Grid>
   );
 }
-
-export default withRouter(Tarjeta)
 
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
     flexGrow: 1,
+    margin: 10
   },
   bullet: {
     display: "inline-block",
@@ -79,5 +74,8 @@ const useStyles = makeStyles({
   },
   pos: {
     marginBottom: 12,
+  },
+  large: {
+    marginRight: 10,
   },
 });
