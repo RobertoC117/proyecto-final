@@ -21,7 +21,10 @@ import Preguntas from './components/PreguntasFrec'
 import Contacto from './components/Contacto'
 import Main from './components/Main.js'
 import PruebaEmail from './components/PruebaEmail'
+import Recuperacion from './components/Recuperacion.js'
+import ChangePass from './components/ChangePass.js'
 import RecibirParametrosPrueba from './components/RecibirParametrosPrueba'
+import Ayuda from './components/Ayuda'
 import { Grid } from '@material-ui/core'
 
 function App() {
@@ -93,22 +96,30 @@ function App() {
           <Route path='/prueba_email'>
             <PruebaEmail/>
           </Route>
-
+          <Route path='/prueba/'>
+            <RecibirParametrosPrueba/>
+          </Route>
           <Route path='/prueba/code=:code&key=:key'>
             <RecibirParametrosPrueba/>
           </Route>
           {
             //#endregion
           }
+          <Route path='/forgot'>
+            <Recuperacion/>
+          </Route>
+          <Route path='/resetpassword/'>
+            <ChangePass/>
+          </Route>
           <Route path='/contacto'>
             <Contacto/>
           </Route>
           <Route path='/preguntas_frecuentes'>
             <Preguntas/>
           </Route>
-          {/* <Route path='/main2'>
-            <Main/>
-          </Route> */}
+          <Route path='/ayuda'>
+            <Ayuda/>
+          </Route>
           {/* PARA LA RUTA QUE NO EXISTE */}
           <Route path='*'>
             <NotFound title={"Error 404 "} texto={"La página no se encontró "}/>

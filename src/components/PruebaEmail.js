@@ -1,13 +1,14 @@
 import { Button } from '@material-ui/core';
 import React from 'react'
 import {useDispatch} from 'react-redux'
-import {EnviarEmailEjemplo} from '../redux/userDuck'
+import {EnviarEmailEjemplo, EnviarResetPassword} from '../redux/userDuck'
 
 const PruebaEmail = () => {
     
     const dispatch = useDispatch();
     const enviar = () =>{
-        dispatch(EnviarEmailEjemplo())
+        //dispatch(EnviarEmailEjemplo())
+        dispatch(EnviarResetPassword("rycesoh.080314@gmail.com"))
     }
 
     return (

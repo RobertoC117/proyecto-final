@@ -11,7 +11,7 @@ const dataInicial = {
 const USER_EXITO = 'USER_EXITO';
 const USER_MSG = 'USER_MSG';
 const BREADCRUMBS = 'BREADCRUMBS'
-const GET_INFO = 'GET_INFO';
+const RESET = 'RESET';
 const LOGOUT = 'LOGOUT';
 const LOGIN = 'LOGIN'
 
@@ -28,6 +28,8 @@ export default function userReducer(state = dataInicial, action){
             return {...state, msg:action.payload, loading: false}
         case BREADCRUMBS:
             return {...state, breadcrumbs: action.payload}
+        case RESET:
+            return{...state, resetOk: true}
         default:
             return state;
     }
@@ -373,6 +375,7 @@ export const VerificarEmailEjemplo = (url) => async(dispatch) =>{
             }else{
                 //REGISTRO Y DISPATCH DE EXITO
                 console.log("TODO SALIO BIEN MI PANA")
+                //auth.
                 localStorage.removeItem('email_prueba')
             }
         }else{
@@ -380,6 +383,59 @@ export const VerificarEmailEjemplo = (url) => async(dispatch) =>{
         }
     } catch (error) {
         console.log(error)
+    }
+}
+
+export const EnviarResetPassword = (email) => async(dispatch)=>{
+    try {
+        await auth.sendPasswordResetEmail(email)
+        console.log("RESETEO ENVIADO")
+    } catch (error) {
+        console.log(error)
+    }finally{
+        dispatch({
+            type: USER_MSG,
+            payload:{
+                type:"warning",
+                title:"ATENCION",
+                body:"Se enviara un enlace de recuperacion si existe una cuenta asociada a este email"
+            }
+        })
+    }
+}
+
+export const ResetPassword = (codigo, new_pass) => async(dispatch) =>{
+    try {
+        //codigo = "asdaqfqFFafDS"
+        //new_pass = "$Roberto031100"
+        //codigo = "ZOQ6pAx-0VDUWmlhNTeNFBCqLju7bZ3fbzZPYzbYRTUAAAF3dSzsPg"
+        await auth.confirmPasswordReset(codigo, new_pass)
+        console.log("HECHO")
+        dispatch({
+            type: RESET
+        })
+        dispatch({
+            type: USER_MSG,
+            payload:{
+                type:"success",
+                title:"HECHO",
+                body:"Tu contraseña fue restablecida, ve al login para inicar sesion"
+            }
+        })
+    } catch (error) {
+        console.log(error)
+        if(error.code === "auth/invalid-action-code")
+        {
+            dispatch({
+                type: USER_MSG,
+                payload:{
+                    type:"error",
+                    title:"ERROR",
+                    body:"El codigo fue manipulado, expiró o ya ha sido utilizado"
+                }
+            })
+        }
+        //VALIDA LOS ERRORES CON MENSAJES
     }
 }
 

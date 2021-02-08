@@ -133,10 +133,14 @@ const InputAdornments = (props) => {
           <CardActions>
             <Grid container direction="column" justify="center" alignItems="center">
               <Button variant="contained" disabled={loading} color="primary" onClick={() => logear()} disableElevation> Aceptar </Button>
+              <br/>
               <Typography>        
                 <Link href="/registro" variant="body2" className={classes.link}> {'¿No tienes una cuenta? Crea Una'} </Link>
               </Typography>
               <br/>
+              <Typography>        
+                <Link href="/forgot" variant="body2" className={classes.link}> {'Olvide mi contraseña'} </Link>
+              </Typography>
             </Grid>
           </CardActions>
 
