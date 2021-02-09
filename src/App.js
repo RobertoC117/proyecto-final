@@ -1,18 +1,15 @@
 import Footer from './components/Footer'
 import Header from './components/Header.js'
-import Header2 from './components/Header2.js'
-import Repositorio from './components/Repositorio'
+import Repositorio from './components/Repositorio2'
 import Perfil from './components/Perfil'
 import Login from './components/Login'
 import Registro from './components/Registro'
-import Nuevo from './components/NewPost'
 import Post from './components/Post.js'
 import Aviso from './components/Vizualizador'
 import Inicio from './components/Home'
 import Ajustes from './components/Ajustes'
 import { BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom'
 import {auth} from './config/firebase'
-import Main2 from './components/Main2.jsx'
 import React from 'react'
 import BreadBar from './components/BreadBar'
 import NotFound from './components/NotFound'
@@ -25,6 +22,8 @@ import Recuperacion from './components/Recuperacion.js'
 import ChangePass from './components/ChangePass.js'
 import RecibirParametrosPrueba from './components/RecibirParametrosPrueba'
 import Ayuda from './components/Ayuda'
+import Navegacion from './components/Navegacion'
+import Loading from './components/Loading'
 import { Grid } from '@material-ui/core'
 
 function App() {
@@ -34,7 +33,7 @@ function App() {
   React.useEffect(()=>{
     const fetchUser = () =>{
       auth.onAuthStateChanged(user =>{
-        console.log(user)
+        //console.log(user)
         if(user)
           setFirebaseUser(user)
         else
@@ -80,7 +79,7 @@ function App() {
           <RutaProtegida component={Perfil} path="/perfil" exact/>
           <RutaProtegida component={Repositorio} path="/repositorio" exact/>
           <RutaProtegida component={Ajustes} path="/ajustes" exact/>
-          <RutaProtegida component={Post} path="/post/:id" exact/>
+          <RutaProtegida component={Post} path="/post/:id_post" exact/>
           <RutaProtegida component={Busqueda} path="/busqueda/:word" exact/>
           <RutaProtegida path="/busqueda/*" exact>
               <NotFound title={"Error 400 "} texto={"La peticion no se completo por que hacen falta parametros"}/>
@@ -119,6 +118,12 @@ function App() {
           </Route>
           <Route path='/ayuda'>
             <Ayuda/>
+          </Route>
+          <Route path='/navegacion'>
+            <Navegacion/>
+          </Route>
+          <Route path='/loading'>
+            <Loading/>
           </Route>
           {/* PARA LA RUTA QUE NO EXISTE */}
           <Route path='*'>

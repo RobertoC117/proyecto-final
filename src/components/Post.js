@@ -15,22 +15,40 @@ import Button from '@material-ui/core/Button';
 import FavoriteOutlineIcon from '@material-ui/icons/FavoriteBorder';
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import Comentario from './Comentario';
+import NotFound from './NotFound';
 //Breadcrumbs
-import { withRouter, useLocation} from 'react-router-dom'
+import { withRouter, useLocation, useParams} from 'react-router-dom'
 import {useDispatch, useSelector} from 'react-redux'
 import { AddBreadcrum } from '../redux/userDuck'
+import { VerPost } from '../redux/postDuck'
 
 export default function Post() {
   const classes = useStyles();
   const dispatch = useDispatch();
   const path = useLocation().pathname;
   const migajas = useSelector(store => store.user.breadcrumbs)
+  const post = useSelector(store => store.posts.post)
+  const {id_post} = useParams();
+  const fecha = new Date()
+
+  const trataNombre = (array_nombre) =>{
+    let autor = array_nombre.map(nombre => {
+        let valor = nombre.split("")
+        for(let i = 1; i < valor.length; i++){
+            valor[i] = valor[i].toLowerCase()
+        }
+        return valor.join("")
+    })
+    return autor.join(" ")
+  }
   
   React.useEffect(()=>{
       dispatch(AddBreadcrum("Post", path))
-  },[])
+      dispatch(VerPost(id_post))
+  },[id_post])
 
   return (
+    post ?
     <Grid container direction="column" justify="space-around" alignItems="center" className={classes.root} >
       <Grid item xs={9}>
         <Card className={classes.post}>
@@ -38,22 +56,23 @@ export default function Post() {
             <Grid container direction="row" justify="flex-start" alignItems="center" className={classes.tittle} >
               <Avatar src="#" className={classes.large} />
               <Grid direction="column" justify="flex-start" alignItems="center" className={classes.tittle2} >
-                <Typography variant="h4" > Título </Typography>
+                <Typography variant="h4" > {post.titulo} </Typography>
                 <Grid container direction="row" justify="flex-start" alignItems="center" >
-                  <Typography color="textSecondary" variant="subtitle2" > Usuario </Typography>
+                  <Typography color="textSecondary" variant="subtitle2" > {trataNombre(post.autor)} </Typography>
                   <Typography color="textSecondary" variant="subtitle2" > • </Typography>
-                  <Typography color="textSecondary" variant="subtitle2" > Fecha </Typography>
+                  <Typography color="textSecondary" variant="subtitle2" >  { new Date(post.fecha).toString() } </Typography>
                 </Grid>
               </Grid>
             </Grid>
             <Grid className={classes.body}>
               <Typography variant="body2" component="p">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Rhoncus 
+                {/* Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Rhoncus 
                 dolor purus non enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in hendrerit gravida
                 rutrum quisque non tellus.
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Rhoncus 
                 dolor purus non enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in hendrerit gravida
-                rutrum quisque non tellus.
+                rutrum quisque non tellus. */}
+                {post.texto}
               </Typography>
             </Grid>
           </CardContent>
@@ -85,6 +104,22 @@ export default function Post() {
         </Card>
       </Grid>
     </Grid>
+    :
+    <>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <NotFound title="Ups!" texto="No se encontro este post"/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+    </>
   );
 }
 

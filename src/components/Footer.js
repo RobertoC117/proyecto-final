@@ -21,6 +21,7 @@ export default function IconBreadcrumbs() {
             <Link to="/contacto">Contacto</Link><br/>
             <Link to="/ayuda">Ayuda</Link><br/>
             <Link to="/preguntas_frecuentes">Preguntas Frecuentes</Link><br/>
+            <Link to="/navegacion">Mapa de navegacion</Link><br/>
         </Typography>
       </Grid>
 

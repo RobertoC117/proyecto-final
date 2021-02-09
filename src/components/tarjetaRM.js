@@ -15,6 +15,7 @@ import { withRouter } from 'react-router-dom'
 
 const Tarjeta = (props) => {
   const classes = useStyles();
+  const fecha = new Date(props.fecha)
   
   const redireccion = () =>{
       props.history.push("/post/este_id_no_existe")
@@ -22,7 +23,7 @@ const Tarjeta = (props) => {
 
   const bull = <span className={classes.bullet}>•</span>;
   return (
-    <Grid item xs>
+    <Grid item xs={4}>
       <Card className={classes.root}>
         <CardContent>
           <Typography
@@ -30,7 +31,7 @@ const Tarjeta = (props) => {
             color="textSecondary"
             gutterBottom
           >
-            Fecha - {props.fecha}
+            Fecha - {fecha.toString()}
           </Typography>
           <Typography variant="h5" component="h2">
             Título - {props.titulo}

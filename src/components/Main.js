@@ -167,9 +167,10 @@ export default function Main() {
               </Grid>
               <input accept="*" type="file" style={{ display: 'none' }} />
               <label htmlFor="contained-button-file">
+              {/* BOTON PARA SUBIR LOS ARCHIVOS
               <Button size="small" variant="contained" color="primary" className={classes.button}>
                 Subir Archivos 
-              </Button>
+              </Button> */}
               </label>
             </Grid>
           </DialogContent>

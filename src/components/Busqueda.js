@@ -7,7 +7,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import {useDispatch, useSelector} from 'react-redux'
 import { AddBreadcrum } from '../redux/userDuck'
 import { useLocation, useParams } from 'react-router-dom'
-import { busquedaAutor_Lenguaje, Buscar} from '../redux/postDuck'
+import { Buscar} from '../redux/postDuck'
+import Loading from './Loading'
 
 const Busqueda = () => {
     const classes = useStyles();
@@ -34,7 +35,7 @@ const Busqueda = () => {
                             <Typography variant="h4" > Resultados de Busqueda </Typography>
                             <Grid container direction="column" justify="center" alignItems="center" variant="outlined" >
                             {
-                                resultados.map(item => <><Post nombre={item.autor[0] + " " + item.autor[1]} fecha={item.fecha} texto={item.texto} titulo={item.titulo}/><br/></>)
+                                resultados.map(item => <><Post id={item.id_post} nombre={item.autor[0] + " " + item.autor[1]} fecha={item.fecha} texto={item.texto} titulo={item.titulo}/><br/></>)
                             }
                             {/* <Post nombre="Alondra" fecha="01/Diciembre/2020"/><br/>
                             <Post nombre="Juan" fecha="30/Noviembre/2020"/><br/>
@@ -63,9 +64,9 @@ const Busqueda = () => {
                 }        
             </Grid>
         </Grid>):
-        (<div>
-            <h1>CARGANDO DATOS.....</h1>
-        </div>)
+        (
+          <Loading/>
+        )
     )
 }
 

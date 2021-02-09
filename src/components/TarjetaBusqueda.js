@@ -11,8 +11,9 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import Favorite from "@material-ui/icons/Favorite";
 import FavoriteBorder from "@material-ui/icons/FavoriteBorder";
+import { withRouter } from 'react-router-dom'
 
-export default function Tarjeta(props) {
+const Tarjeta = (props) => {
   const classes = useStyles();
   let fecha = new Date(props.fecha).toString();
   return (
@@ -37,7 +38,7 @@ export default function Tarjeta(props) {
           </Typography>
         </CardContent>
         <CardActions justify="space-between" s>
-          <Button size="small">Ver Más</Button>
+          <Button size="small" onClick={() => props.history.push("/post/" + props.id)} >Ver Más</Button>
           <FormControlLabel
             style={{ marginLeft: "auto" }}
             control={
@@ -74,3 +75,5 @@ const useStyles = makeStyles({
     marginRight: 10,
   },
 });
+
+export default withRouter(Tarjeta)

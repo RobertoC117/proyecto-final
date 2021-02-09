@@ -17,6 +17,8 @@ const LOADING = 'LOADING'
 const POST_EXITO = 'POST_EXITO';
 const SET_FILTROS = 'SET_FILTROS';
 const BUSCAR_AGAIN = 'BUSCAR_AGAIN';
+const MIS_POSTS = 'MIS_POSTS';
+const VER_POST = 'VER_POST';
 
 export default function postReducer(state = dataInicial, action){
     switch (action.type) {
@@ -28,6 +30,10 @@ export default function postReducer(state = dataInicial, action){
             return {...state, loading:false, config_busqueda:action.payload}
         case BUSCAR_AGAIN:
             return {...state, again: action.payload}
+        case MIS_POSTS:
+            return {...state, mis_posts: action.payload}
+        case VER_POST:
+            return {...state, post: action.payload}
         default:
             return state;
     }
@@ -517,7 +523,37 @@ export const busquedaLenguaje_UltimoMes = (lenguaje) => async (dispatch, getStat
 
 }
 //#endregion
+export const MisPosts = () => async(dispatch, getState) => {
+    try {
+        let array_posts = getState().user.userdata.posts
 
+        let response = await Promise.all(array_posts.map(idPost => db.collection("publicaciones").doc(idPost.toString()).get()))
+
+        let data = await Promise.all(response.map(item => item.data()))
+        
+        dispatch({
+            type: MIS_POSTS,
+            payload: data
+        })
+
+    } catch (error) {
+        console.log(error)
+    }
+} 
+
+export const VerPost = (id_post = "4az1611898898475") => async (dispatch, getState) =>{
+    try {
+        const response = await db.collection("publicaciones").doc(id_post).get();
+        const data = response.data();
+        //console.log(data)
+        dispatch({
+            type: VER_POST,
+            payload: data
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 export const mantenerPostState = () => (dispatch) =>{
     try {

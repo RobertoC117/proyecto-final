@@ -467,7 +467,7 @@ export const AddBreadcrum = (name, path) => (dispatch, getState) =>{
 
         //bread.push({name, path});
 
-        console.log(bread)
+        //console.log(bread)
 
         localStorage.setItem('breadcrumbs', JSON.stringify(bread))
 
