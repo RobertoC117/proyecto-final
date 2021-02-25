@@ -17,10 +17,13 @@ import Favorite from "@material-ui/icons/Favorite";
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
 import CloseIcon from "@material-ui/icons/Close";
 import { withRouter } from 'react-router-dom'
+import {useDispatch} from 'react-redux'
+import { EliminarPost } from '../redux/userDuck'
 
 
 const Tarjeta = (props) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [Dialogopen, setDialogOpen] = React.useState(false);
   const fecha = new Date(props.fecha)
   
@@ -35,6 +38,12 @@ const Tarjeta = (props) => {
   const handleDialogClose = () => {
     setDialogOpen(false);
   };
+
+  
+  const borrar = (id) =>{
+    dispatch(EliminarPost(id))
+    handleDialogClose()
+  } 
 
   const bull = <span className={classes.bullet}>•</span>;
   return (
@@ -55,12 +64,12 @@ const Tarjeta = (props) => {
               </Typography>
             </Grid>
             
-            {/* ESTE BOTON ES PARA ELIMINAR EL POST
+            {/* ESTE BOTON ES PARA ELIMINAR EL POST*/}
             <Grid justify="flex-start" alignItems="flex-end" >
               <IconButton size="small">
                 <CloseIcon fontSize="small" onClick={handleDialogOpen} />
               </IconButton>
-            </Grid> */}
+            </Grid> 
           </Grid>
           <Typography variant="body2" component="p">
             {props.texto}
@@ -92,10 +101,10 @@ const Tarjeta = (props) => {
       </Card>
 
       <Dialog open={Dialogopen} onClose={handleDialogClose} aria-labelledby="form-dialog-title">
-          <DialogTitle id="form-dialog-title"> ¿Seguro que quieres eliminar esta tarjeta? </DialogTitle>
+          <DialogTitle id="form-dialog-title"> ¿Seguro que quieres eliminar esta publicacion? </DialogTitle>
           <DialogActions>
             <Button onClick={handleDialogClose} color="primary"> Cancelar </Button>
-            <Button onClick={handleDialogClose} color="primary"> Aceptar </Button>
+            <Button onClick={()=>borrar(props.id)} color="primary"> Aceptar </Button>
           </DialogActions>
         </Dialog>
 

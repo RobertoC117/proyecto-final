@@ -122,9 +122,6 @@ function App() {
           <Route path='/navegacion'>
             <Navegacion/>
           </Route>
-          <Route path='/loading'>
-            <Loading/>
-          </Route>
           {/* PARA LA RUTA QUE NO EXISTE */}
           <Route path='*'>
             <NotFound title={"Error 404 "} texto={"La página no se encontró "}/>
@@ -133,7 +130,7 @@ function App() {
         <Footer/>
         </Grid>
     </Router>
-  ):(<div>Cargando...</div>);
+  ):(<Loading/>);
 }
 
 export default App;

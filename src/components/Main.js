@@ -19,11 +19,11 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import { Collapse } from "@material-ui/core";
 //BREADCRUMBS
-import {useDispatch, useSelector} from 'react-redux'
-import { AddBreadcrum } from '../redux/userDuck'
 import { useLocation } from 'react-router-dom'
+import {useDispatch, useSelector} from 'react-redux'
 //ACCIONES
-import {crearNuevoPost, createNewMsg, deleteMsg} from '../redux/userDuck'
+import {AddBreadcrum, crearNuevoPost, createNewMsg, deleteMsg} from '../redux/userDuck'
+import { MasGustados } from '../redux/postDuck'
 
 export default function Main() {
   const classes = useStyles();
@@ -31,6 +31,7 @@ export default function Main() {
   const path = useLocation().pathname;
   const migajas = useSelector(store => store.user.breadcrumbs)
   const msg = useSelector(store => store.user.msg)
+  const gustados = useSelector(store => store.posts.mas_gustado)
 
   const ExpRegTitulo = /^[\s\S]{10,60}$/
   const ExpRegDescripcion = /^[\s\S]{20,500}$/
@@ -51,6 +52,7 @@ export default function Main() {
   
   React.useEffect(()=>{
       dispatch(AddBreadcrum("Main", path))
+      dispatch(MasGustados())
   },[])
 
   const changeState = (prop) => (event) =>{
@@ -126,14 +128,31 @@ export default function Main() {
         <Card className={classes.card}>
           <CardContent>
             <Grid container direction="column" justify="center" alignItems="center" className={classes.tittle} >
-              <Typography variant="h4" > Inicio </Typography>
+              <Typography variant="h4" > Mas Gustados </Typography>
                 <Grid container justify="flex-end" alignItems="center" style={{ flex: 1 }}>
                   <Button size="small" variant="contained" color="primary" className={classes.button} onClick={handleDialogOpen} >
                     Nuevo
                   </Button>
                 </Grid>
-                <Tarjeta />
-                <Tarjeta />
+                {
+                  gustados &&(
+                      gustados.map(item => <Tarjeta id={item.id_post} autor={item.autor[0] + " " + item.autor[1]} fecha={item.fecha} texto={item.texto} titulo={item.titulo}/>)
+                  )
+                }
+            </Grid>
+          </CardContent>
+        </Card>
+
+        <Card className={classes.card}>
+          <CardContent>
+            <Grid container direction="column" justify="center" alignItems="center" className={classes.tittle} >
+              <Typography variant="h4" > Ultimos post </Typography>
+                Aqui iran los post de las personas que sigas
+                {/* {
+                  gustados &&(
+                      gustados.map(item => <Tarjeta id={item.id_post} autor={item.autor[0] + " " + item.autor[1]} fecha={item.fecha} texto={item.texto} titulo={item.titulo}/>)
+                  )
+                } */}
             </Grid>
           </CardContent>
         </Card>

@@ -19,6 +19,7 @@ const SET_FILTROS = 'SET_FILTROS';
 const BUSCAR_AGAIN = 'BUSCAR_AGAIN';
 const MIS_POSTS = 'MIS_POSTS';
 const VER_POST = 'VER_POST';
+const MAS_GUSTADOS = 'MAS_GUSTADOS'
 
 export default function postReducer(state = dataInicial, action){
     switch (action.type) {
@@ -32,8 +33,10 @@ export default function postReducer(state = dataInicial, action){
             return {...state, again: action.payload}
         case MIS_POSTS:
             return {...state, mis_posts: action.payload}
+        case MAS_GUSTADOS:
+            return {...state, mas_gustado: action.payload}
         case VER_POST:
-            return {...state, post: action.payload}
+            return {...state, loading:false, post: action.payload}
         default:
             return state;
     }
@@ -523,6 +526,7 @@ export const busquedaLenguaje_UltimoMes = (lenguaje) => async (dispatch, getStat
 
 }
 //#endregion
+
 export const MisPosts = () => async(dispatch, getState) => {
     try {
         let array_posts = getState().user.userdata.posts
@@ -541,14 +545,113 @@ export const MisPosts = () => async(dispatch, getState) => {
     }
 } 
 
-export const VerPost = (id_post = "4az1611898898475") => async (dispatch, getState) =>{
+export const VerPost = (id_post) => async (dispatch, getState) =>{
     try {
+        //id "4az1611898898475"
+        let id_user = getState().user.userdata.uid
         const response = await db.collection("publicaciones").doc(id_post).get();
         const data = response.data();
-        //console.log(data)
+
+        //SABER SI ME GUSTA O NO
+        let array_people = data.users_likes
+        let i_like = array_people.indexOf(id_user) !== -1 ? true : false
+        dispatch({
+            type: VER_POST,
+            payload: {...data, megusta: i_like}
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const Me_Gusta = (status, id_post, id_user) => async(dispatch, getState) =>{
+    dispatch({
+        type: LOADING
+    })
+    try {
+        let response;
+        response = await db.collection("publicaciones").doc(id_post).get()
+        let array_people = response.data().users_likes
+        let cant_likes = response.data().likes
+        //console.log(array_people)
+
+        if(!status){
+            console.log("DISLIKE")
+            await db.collection("publicaciones").doc(id_post).update({likes: firebase.firestore.FieldValue.increment(-1)})
+            cant_likes--;
+            array_people = array_people.filter(ids => ids !== id_user)
+
+        }else{
+            console.log("LIKE")
+            await db.collection("publicaciones").doc(id_post).update({likes: firebase.firestore.FieldValue.increment(1)})
+            cant_likes++;
+            array_people.push(id_user)
+
+        }
+        
+        await db.collection("publicaciones").doc(id_post).update({users_likes: array_people})
+        //SABER SI ME GUSTA O NO
+        let i_like = array_people.indexOf(id_user) !== -1 ? true : false
+        dispatch({
+            type: VER_POST,
+            payload: {...response.data(), likes: cant_likes, users_likes: array_people, megusta: i_like}
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const Comentar = (id_post, comentario_datos) => async(dispatch, getState) =>{
+    try {
+        // id_post = "4az1611898898475";
+        // comentario_datos = {
+        //     nombre: "Roberto",
+        //     comentario: "Hola a todos"
+        // };
+        let id_user = getState().user.userdata.uid
+        const response = await db.collection("publicaciones").doc(id_post).get()
+        let comentarios = response.data().comentarios
+
+        if(comentarios){
+            comentarios.push(comentario_datos)
+        }else{
+            comentarios = [comentario_datos];
+        }
+
+        console.log(comentarios)
+        await db.collection("publicaciones").doc(id_post).update({comentarios})
+        let data = response.data()
+
+        //SABER SI ME GUSTA O NO
+        let array_people = data.users_likes
+        let i_like = array_people.indexOf(id_user) !== -1 ? true : false
+
+        //console.log("ANTES",data)
+
+        data = {...data, comentarios, megusta: i_like}
+
+        //console.log("AHORA",data)
         dispatch({
             type: VER_POST,
             payload: data
+        })
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const MasGustados = () => async(dispatch, getState) =>{
+    try {
+        const response = await db.collection("publicaciones").orderBy("likes", "desc").limit(4).get()
+        let arreglo_data = [];
+        for (let i = 0; i < response.docs.length; i++) {
+            arreglo_data.push(response.docs[i].data());
+        }
+        console.log(arreglo_data)
+        dispatch({
+            type: MAS_GUSTADOS,
+            payload: arreglo_data,
         })
     } catch (error) {
         console.log(error)

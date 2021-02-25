@@ -349,6 +349,7 @@ export const deleteMsg = (time = 0) => async(dispatch) =>{
     }
 }
 
+//ESTA EN BETA XD
 export const EnviarEmailEjemplo = () => async(dispatch) =>{
     try {
         const actionCodeSettings = {
@@ -363,7 +364,7 @@ export const EnviarEmailEjemplo = () => async(dispatch) =>{
         console.log(error)
     }
 }
-
+//ESTA EN BETA XD
 export const VerificarEmailEjemplo = (url) => async(dispatch) =>{
     try {
         if(auth.isSignInWithEmailLink(url)){
@@ -495,7 +496,7 @@ export const crearNuevoPost = (ObjPost) => async(dispatch, getState) =>{
         const id_post = uid.slice(0,4) + new Date().getTime();
         const id_autor = uid;
         let autor = nombre.split(' ').map(item => item.toUpperCase()) 
-        ObjPost ={...ObjPost, autor, id_post, fecha: new Date().getTime(), id_autor}
+        ObjPost ={...ObjPost, autor, id_post, fecha: new Date().getTime(), id_autor, comentarios:[]}
 
         await db.collection("publicaciones").doc(id_post.toString()).set(ObjPost)
         let datosUsuario = JSON.parse(localStorage.getItem('userData'))
@@ -507,6 +508,46 @@ export const crearNuevoPost = (ObjPost) => async(dispatch, getState) =>{
             type: USER_EXITO,
             payload: datosUsuario
         })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const Me_Gusta = (status, id_post) => async(dispatch, getState) =>{
+    dispatch({
+        type: LOGIN
+    })
+    try {
+        if(status){
+            console.log("DISLIKE")
+            await db.collection("publicaciones").doc(id_post).update({like: firebase.firestore.FieldValue.increment(-1)})
+        }else{
+            console.log("LIKE")
+            await db.collection("publicaciones").doc(id_post).update({like: firebase.firestore.FieldValue.increment(1)})
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const EliminarPost = (id_post) => async (dispatch, getState) =>{
+    try {
+        const {email} = getState().user.userdata
+
+        await db.collection("publicaciones").doc(id_post).delete()
+
+        let datosUsuario = JSON.parse(localStorage.getItem('userData'))
+        let filtrado = datosUsuario.posts.filter(item => item !== id_post)
+        datosUsuario.posts = filtrado;
+
+        await db.collection("usuarios").doc(email).update({posts:filtrado});
+        localStorage.setItem('userData', JSON.stringify(datosUsuario))
+
+        dispatch({
+            type: USER_EXITO,
+            payload: datosUsuario
+        })
+
     } catch (error) {
         console.log(error)
     }

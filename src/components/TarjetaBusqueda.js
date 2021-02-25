@@ -16,6 +16,8 @@ import { withRouter } from 'react-router-dom'
 const Tarjeta = (props) => {
   const classes = useStyles();
   let fecha = new Date(props.fecha).toString();
+  let direccion = "/post/"+props.id
+  direccion = direccion.replace(/\s+/g, '')
   return (
       <Card className={classes.root}>
         <CardContent>
@@ -23,7 +25,7 @@ const Tarjeta = (props) => {
             <Avatar src="#" className={classes.large} />
             <Grid direction="column" justify="center" alignItems="flex-start">
               <Typography variant="subtitle1">
-                Nombre de Usuario - {props.autor}
+                {props.autor}
               </Typography>
               <Typography className={classes.title} color="textSecondary" gutterBottom>
                 {fecha}
@@ -38,8 +40,8 @@ const Tarjeta = (props) => {
           </Typography>
         </CardContent>
         <CardActions justify="space-between" s>
-          <Button size="small" onClick={() => props.history.push("/post/" + props.id)} >Ver Más</Button>
-          <FormControlLabel
+          <Button size="small" onClick={() => props.history.push(direccion)} >Ver Más</Button>
+          {/* <FormControlLabel
             style={{ marginLeft: "auto" }}
             control={
               <Checkbox
@@ -48,7 +50,7 @@ const Tarjeta = (props) => {
                 size="small"
               />
             }
-          />
+          /> */}
         </CardActions>
       </Card>
   );

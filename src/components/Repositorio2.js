@@ -18,11 +18,12 @@ export default function Repositorio() {
   const dispatch = useDispatch();
   const path = useLocation().pathname;
   const mis_posts = useSelector(store => store.posts.mis_posts)
+  const array_mis_posts = useSelector(store => store.user.userdata.posts)
 
   React.useEffect(()=>{
       dispatch(AddBreadcrum("Repositorio", path))
       dispatch(MisPosts())
-  },[])
+  },[array_mis_posts])
 
   return (
     mis_posts ?

@@ -11,10 +11,13 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import Favorite from "@material-ui/icons/Favorite";
 import FavoriteBorder from "@material-ui/icons/FavoriteBorder";
+import { withRouter } from 'react-router-dom'
 
-export default function Tarjeta(props) {
+const Tarjeta = (props) => {
   const classes = useStyles();
-  let fecha = new Date(props.fecha*1000).toString();
+  let fecha = new Date(props.fecha).toString();
+  let direccion = "/post/"+props.id
+  direccion = direccion.replace(/\s+/g, '')
   return (
       <Card className={classes.root}>
         <CardContent>
@@ -22,28 +25,28 @@ export default function Tarjeta(props) {
             <Avatar src="#" className={classes.large} />
             <Grid direction="column" justify="center" alignItems="flex-start">
               <Typography variant="subtitle1">
-                Nombre de Usuario - {props.autor}
+                {props.autor}
               </Typography>
               <Typography className={classes.title} color="textSecondary" gutterBottom>
-                Fecha - {fecha}
+                {fecha}
               </Typography>
             </Grid>
           </Grid>
           <Typography variant="h5" component="h2">
-            Título - {props.titulo}
+            {props.titulo}
           </Typography>
           <Typography variant="body2" component="p">
             {props.texto}
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            {/* Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua. Rhoncus
             dolor purus non enim praesent elementum facilisis leo vel. Risus at
             ultrices mi tempus imperdiet. Semper risus in hendrerit gravida
-            rutrum quisque non tellus.
+            rutrum quisque non tellus. */}
           </Typography>
         </CardContent>
         <CardActions justify="space-between" s>
-          <Button size="small">Ver Más</Button>
-          <FormControlLabel
+          <Button size="small" onClick={() => props.history.push(direccion)}>Ver Más</Button>
+          {/* <FormControlLabel
             style={{ marginLeft: "auto" }}
             control={
               <Checkbox
@@ -52,7 +55,7 @@ export default function Tarjeta(props) {
                 size="small"
               />
             }
-          />
+          /> */}
         </CardActions>
       </Card>
   );
@@ -79,3 +82,5 @@ const useStyles = makeStyles({
     marginRight: 10,
   },
 });
+
+export default withRouter(Tarjeta)

@@ -20,16 +20,20 @@ import NotFound from './NotFound';
 import { withRouter, useLocation, useParams} from 'react-router-dom'
 import {useDispatch, useSelector} from 'react-redux'
 import { AddBreadcrum } from '../redux/userDuck'
-import { VerPost } from '../redux/postDuck'
+import { VerPost, Comentar, Me_Gusta } from '../redux/postDuck'
 
 export default function Post() {
   const classes = useStyles();
   const dispatch = useDispatch();
   const path = useLocation().pathname;
-  const migajas = useSelector(store => store.user.breadcrumbs)
   const post = useSelector(store => store.posts.post)
+  const loading = useSelector(store => store.posts.loading)
+  const userdata = useSelector(store => store.user.userdata)
   const {id_post} = useParams();
   const fecha = new Date()
+
+  const [com, setCom] = React.useState("")
+  //const [like, setLike] = React.useState(false)
 
   const trataNombre = (array_nombre) =>{
     let autor = array_nombre.map(nombre => {
@@ -41,11 +45,29 @@ export default function Post() {
     })
     return autor.join(" ")
   }
+
   
   React.useEffect(()=>{
-      dispatch(AddBreadcrum("Post", path))
-      dispatch(VerPost(id_post))
+    dispatch(AddBreadcrum("Post", path))
+    dispatch(VerPost(id_post))
   },[id_post])
+  
+  const comentar = () =>{
+      let datos = {
+        uid: userdata.uid,
+        nombre: userdata.username,
+        comentario: com,
+        fecha: new Date().getTime(),
+      }
+      dispatch(Comentar(id_post, datos))
+      setCom("")
+  }
+
+  const megusta = () =>{
+    // setLike(!like)
+    // console.log(like)
+    dispatch(Me_Gusta(!post.megusta, id_post, userdata.uid))
+  }
 
   return (
     post ?
@@ -84,22 +106,34 @@ export default function Post() {
                     icon={<FavoriteOutlineIcon />}
                     checkedIcon={<FavoriteIcon />}
                     size="small"
+                    checked={post.megusta}
+                    onChange={megusta}
+                    disabled={loading}
                   />
                 }
-                label="10"
+                label={post.likes}
               />
               <Typography color="textSecondary" variant="subtitle1" > Comentarios: </Typography>
-              <Typography variant="subtitle1" > 2 </Typography>
+              <Typography variant="subtitle1" > {post.comentarios ? post.comentarios.length : 0} </Typography>
             </Grid>
           </CardActions>
           <Divider />
           <Grid container direction="column" justify="flex-start" alignItems="center" className={classes.comments}>            
             <Grid container direcion="row" className={classes.Addcomments}>
-              <TextField size="small" label="Añade un Comentario" variant="filled" className={classes.txtfield} />
-              <Button variant="contained" color="primary" disableElevation className={classes.button} > Publicar </Button>
+              <TextField size="small" value={com} onChange={(e) => setCom(e.target.value)} label="Añade un Comentario" variant="filled" className={classes.txtfield} />
+              {
+                com !== "" && <Button variant="contained" color="primary" disableElevation className={classes.button} onClick={()=>comentar()} > Publicar </Button>
+              }
             </Grid>
-            <Comentario />
-            <Comentario />
+            {
+              post.comentarios &&(
+                
+                    post.comentarios.map(cm => <Comentario nombre={cm.nombre} fecha={cm.fecha} texto={cm.comentario}/>)
+                    
+              )
+            }
+            {/* <Comentario />
+            <Comentario /> */}
           </Grid>
         </Card>
       </Grid>

@@ -10,12 +10,15 @@ import recursos from './img/recursos.jpg'
 import interaccion from './img/interaccion.png'
 import futuro from './img/futuro.jpg'
 import aprendizajeFondo from './img/aprendizaje_fondo.png'
+import Scroll from './Scroll'
+import Carrusel from './Carrusel'
 
 export default function InputAdornments() {
   const classes = useStyles();
   return (
     <Grid container direction="column" justify="center" alignItems="center" className={classes.root}>
         
+      
       <Grid container direction="column" justify="center" alignItems="center" xs={11}> 
         <Card className={classes.margin}>
           <Grid container direction="row"justify="center" alignItems="center">
@@ -45,7 +48,7 @@ export default function InputAdornments() {
           </Grid>
         </Card>
       </Grid>
-
+      <Carrusel/>
       <Grid container direction="row" justify="center" alignItems="center" xs={11}>
         <Grid xs={4}>
           <Card className={classes.margin}>
@@ -120,30 +123,6 @@ export default function InputAdornments() {
         </Card>
       </Grid>
 
-      {/* <Grid container direction="column" justify="center" alignItems="center" xs={11}> 
-        <Card className={classes.margin}>
-          <Grid container direction="row"justify="center" alignItems="center">
-            <Grid direction="column" xs={9}>
-              <CardContent className={classes.content}>
-                <Typography component="h3" variant="h3">
-                  KOGit
-                </Typography>
-                <Typography variant="h5">
-                El e-learning está cambiando. Veremos nuevos modelos y surgirán nuevas tecnologías y 
-                nuevos diseños. Entonces dejemos atrás la e, o al menos démosle una definición nueva y más amplia.
-                {<br/>}
-                {<br/>}
-                ― Elliot Masie
-                </Typography>
-              </CardContent>
-            </Grid>
-            <Grid xs={3}>
-              <img className={classes.imgA} alt="Imagen" src={learning} />
-            </Grid>
-          </Grid>
-        </Card>
-      </Grid> */}
-
       <Grid container direction="row" justify="center" alignItems="center" xs={11}> 
         <Card className={classes.margin}>
           <Grid container direction="row" justify="flex-end" alignItems="center" className={classes.backImg}>
@@ -160,7 +139,7 @@ export default function InputAdornments() {
           </Grid>
         </Card>
       </Grid>
-
+      <Scroll showBelow={250} />         
     </Grid>
   );
 }
